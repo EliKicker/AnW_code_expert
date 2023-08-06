@@ -4,8 +4,8 @@ import java.text.DecimalFormat;
 class Main {
     public static void main(String[] args) {
         // Uncomment this line if you want to read from a file
-        In.open("vanishing_bag/public/sample.in");
-        Out.compareTo("vanishing_bag/public/sample.out");
+        In.open("public/sample.in");
+        Out.compareTo("public/sample.out");
         Out.setEpsilon(0.0001);
 
         int t = In.readInt();
@@ -40,14 +40,8 @@ class Main {
             for (int j = 1; j <= b; ++j) {
                 double p_b = j / (double)(j + i);                                                               //pr current player draws black stone
                 double p_b_e = ((j - 1) / (double)(j + i - 1));                                                 //pr black stone gets evicted given a black stone got drawn
-
-                if (j >= 2) {
-                    dp[i][j][0] = p_b * (dp[i - 1][j - 1][1] * (1 - p_b_e) + dp[i][j - 2][1] * p_b_e) + (1 - p_b) * 0;
-                    dp[i][j][1] = p_b * (dp[i - 1][j - 1][0] * (1 - p_b_e) + dp[i][j - 2][0] * p_b_e) + (1 - p_b) * 1;
-                } else {
-                    dp[i][j][0] = p_b * dp[i - 1][j - 1][1] + (1 - p_b) * 0;
-                    dp[i][j][1] = p_b * dp[i - 1][j - 1][0] + (1 - p_b) * 1;
-                }
+                dp[i][j][0] = p_b * (dp[i - 1][j - 1][1] * (1 - p_b_e) + dp[i][Math.max(j - 2, 0)][1] * p_b_e);
+                dp[i][j][1] = p_b * (dp[i - 1][j - 1][0] * (1 - p_b_e) + dp[i][Math.max(j - 2, 0)][0] * p_b_e) + (1 - p_b);
             }
         }
 
